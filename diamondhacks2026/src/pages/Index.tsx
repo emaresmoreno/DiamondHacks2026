@@ -52,7 +52,7 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row items-center gap-4">
           <div className="flex items-center gap-2 shrink-0">
             <MapPin className="w-6 h-6 text-primary" />
-            <h1 className="text-xl font-bold text-foreground">PlaceFinder</h1>
+            <h1 className="text-xl font-bold text-foreground">Where2Study</h1>
           </div>
           <SearchBar onSearch={handleSearch} isLoading={isLoading} />
         </div>
@@ -85,8 +85,10 @@ const Index = () => {
             lat={selected ? String(selected.lat) : undefined}
             lon={selected ? String(selected.lon) : undefined}
             query={query}
-            // Passing the raw locations directly to MapView for heatmap rendering
             locations={locations}
+            // Add this line to force a zoom scale when an item is selected
+            zoom={selected ? 17 : 14} 
+            selectedId={selected?.name ?? ""}
           />
         </div>
 

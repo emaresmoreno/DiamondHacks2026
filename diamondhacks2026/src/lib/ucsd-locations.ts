@@ -1,18 +1,9 @@
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "./firebase";
+import {collection, getDocs} from 'firebase/firestore';
 import {useState} from 'react';
 
-//replace this with fetching
+import {db} from './firebase';
 
-export interface studyspots {
-//   id: string;
-  name: string;
-  lat: number;
-  lon: number;
-  popularity: number;
-//   sound: number;
-//   features: string[]
-}
+// replace this with fetching
 
 // export async function fetchLocations(): Promise<UcsdLocation[]> {
 //   const snapshot = await getDocs(collection(db, "locations"));
@@ -20,40 +11,185 @@ export interface studyspots {
 // }
 
 
-//for the tsx files
-// const [locations, setLocations] = useState<locations[]>([]);
+// for the tsx files
+//  const [locations, setLocations] = useState<locations[]>([]);
 
 // useEffect(() => {
 //   fetchLocations().then(setLocations);
 // }, []);
 
 // Seeded random-ish values matching the heatmap
+export interface studyspots {
+  id: string;
+  name: string;
+  lat: number;
+  lon: number;
+  rating: number;
+  popularity: number;
+  sound: number;
+  freeTimeOfDay: string;
+  hasOutlets: boolean;
+  isAccessible: boolean;
+  features: string[];
+}
+
 export const ucsdLocations: studyspots[] = [
-  {name: 'Geisel Library', lat: 32.8812, lon: -117.2375, popularity: 0.62},
-  {name: 'Price Center', lat: 32.8798, lon: -117.2362, popularity: 0.48},
-  {name: 'MOM Cafe', lat: 32.8785, lon: -117.2401, popularity: 0.55},
-  {name: 'Muir College', lat: 32.8790, lon: -117.2415, popularity: 0.37},
-  {name: 'Revelle College', lat: 32.8743, lon: -117.2410, popularity: 0.71},
-  {name: 'WongAvery Library', lat: 32.8840, lon: -117.2398, popularity: 0.44},
   {
-    name: 'Jacobs School of Engineering',
+    id: "geisel-l1",
+    name: "Geisel Library L1",
+    lat: 32.8812,
+    lon: -117.2375,
+    rating: 4.2,
+    popularity: 0.62,
+    sound: 0.6,
+    freeTimeOfDay: "morning",
+    hasOutlets: true,
+    isAccessible: true,
+    features: ["open late", "group study", "spacious"]
+  },
+  {
+    id: "geisel-l2",
+    name: "Geisel Library L2",
+    lat: 32.8812,
+    lon: -117.2375,
+    rating: 4.5,
+    popularity: 0.2,
+    sound: 0.2,
+    freeTimeOfDay: "morning",
+    hasOutlets: true,
+    isAccessible: true,
+    features: ["individual study", "good lighting", "focused"]
+  },
+  {
+    id: "geisel-l4",
+    name: "Geisel Library L4",
+    lat: 32.8812,
+    lon: -117.2375,
+    rating: 4.8,
+    popularity: 0.9,
+    sound: 0.1,
+    freeTimeOfDay: "all day",
+    hasOutlets: true,
+    isAccessible: true,
+    features: ["focused work", "best views", "modern design"]
+  },
+  {
+    id: "price-center",
+    name: "Price Center",
+    lat: 32.8798,
+    lon: -117.2362,
+    rating: 4.0,
+    popularity: 0.48,
+    sound: 0.8,
+    freeTimeOfDay: "all day",
+    hasOutlets: false,
+    isAccessible: true,
+    features: ["food nearby", "group friendly", "bustling"]
+  },
+  {
+    id: "mom-cafe",
+    name: "MOM Cafe",
+    lat: 32.8785,
+    lon: -117.2401,
+    rating: 4.3,
+    popularity: 0.55,
+    sound: 0.5,
+    freeTimeOfDay: "morning",
+    hasOutlets: true,
+    isAccessible: true,
+    features: ["coffee", "cozy", "limited seating"]
+  },
+  {
+    id: "muir-college",
+    name: "Muir College",
+    lat: 32.8790,
+    lon: -117.2415,
+    rating: 4.1,
+    popularity: 0.37,
+    sound: 0.4,
+    freeTimeOfDay: "afternoon",
+    hasOutlets: false,
+    isAccessible: true,
+    features: ["outdoor seating", "chill vibe", "green space"]
+  },
+  {
+    id: "revelle-college",
+    name: "Revelle College",
+    lat: 32.8743,
+    lon: -117.2410,
+    rating: 4.4,
+    popularity: 0.71,
+    sound: 0.6,
+    freeTimeOfDay: "all day",
+    hasOutlets: true,
+    isAccessible: true,
+    features: ["spacious", "group study", "modern design"]
+  },
+  {
+    id: "hopkins",
+    name: "Hopkins",
+    lat: 32.8840,
+    lon: -117.2398,
+    rating: 3.9,
+    popularity: 0.44,
+    sound: 0.7,
+    freeTimeOfDay: "all day",
+    hasOutlets: false,
+    isAccessible: true,
+    features: ["cafeteria", "food nearby"]
+  },
+  {
+    id: "jacobs",
+    name: "Jacobs School of Engineering",
     lat: 32.8822,
     lon: -117.2338,
-    popularity: 0.83
+    rating: 4.6,
+    popularity: 0.83,
+    sound: 0.3,
+    freeTimeOfDay: "daytime",
+    hasOutlets: true,
+    isAccessible: true,
+    features: ["modern", "tech-friendly", "study pods"]
   },
   {
-    name: 'Franklin Antonio Hall',
+    id: "antonio-hall",
+    name: "Franklin Antonio Hall",
     lat: 32.8819,
     lon: -117.2330,
-    popularity: 0.29
+    rating: 4.2,
+    popularity: 0.29,
+    sound: 0.3,
+    freeTimeOfDay: "daytime",
+    hasOutlets: true,
+    isAccessible: true,
+    features: ["new building", "good lighting", "open areas"]
   },
-  {name: 'Pinpoint Cafe', lat: 32.8775, lon: -117.2350, popularity: 0.58},
   {
-    name: 'Torrey Pines Gliderport',
+    id: "pinpoint-cafe",
+    name: "Pinpoint Cafe",
+    lat: 32.8775,
+    lon: -117.2350,
+    rating: 4.3,
+    popularity: 0.58,
+    sound: 0.5,
+    freeTimeOfDay: "all day",
+    hasOutlets: true,
+    isAccessible: true,
+    features: ["coffee", "casual", "cozy atmosphere"]
+  },
+  {
+    id: "gliderport",
+    name: "Torrey Pines Gliderport",
     lat: 32.8893,
     lon: -117.2510,
-    popularity: 0.91
-  },
+    rating: 4.9,
+    popularity: 0.91,
+    sound: 0.4,
+    freeTimeOfDay: "daytime",
+    hasOutlets: false,
+    isAccessible: true,
+    features: ["outdoors", "scenic", "windy"]
+  }
 ];
 
 /**

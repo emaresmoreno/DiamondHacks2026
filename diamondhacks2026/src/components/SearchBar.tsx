@@ -21,7 +21,7 @@ const SearchBar = ({ onSearch, isLoading }: SearchBarProps) => {
       <Input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search for places, cities, landmarks..."
+        placeholder="Search for study spots..."
         className="h-12 text-base bg-card shadow-sm"
       />
       <Button type="submit" disabled={isLoading || !query.trim()} size="lg" className="h-12 px-6">
