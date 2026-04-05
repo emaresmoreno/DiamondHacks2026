@@ -1,5 +1,6 @@
 import { useState, useEffect} from "react";
 import { MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { useToast } from "../hooks/use-toast";
 import { heatColor } from "../lib/ucsd-locations";
@@ -78,6 +79,16 @@ const Index = () => {
             <MapPin className="w-6 h-6 text-primary" />
             <h1 className="text-xl font-bold text-foreground">Where2Study</h1>
           </div>
+          <div className="flex items-center gap-2 shrink-0">
+
+  
+  <Link
+    to="/study"
+    className="ml-4 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+  >
+    Rate a Study Spot
+  </Link>
+</div>
           <SearchBar onSearch={handleSearch} isLoading={isLoading} />
           <Dialog.Root>
             <Dialog.Trigger asChild>
@@ -133,7 +144,7 @@ const Index = () => {
             />
           </div>
         </div>
-
+        
         {/* RIGHT COLUMN: Permanent Large Map */}
         <div className="lg:col-span-2 h-[calc(100vh-140px)] sticky top-[80px]">
           <MapView
@@ -149,6 +160,7 @@ const Index = () => {
 
       </main>
     </div>
+    
   );
 };
 

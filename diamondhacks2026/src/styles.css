@@ -1,0 +1,172 @@
+* {
+    box-sizing:border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+
+.navbar{
+    background: rgba(145, 68, 222, 0.80);
+    height:80px;
+    width:100%;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    font-size:1.2rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.navbar__container {
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    z-index: 1;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 50px;
+}
+
+#navbar__logo {
+    background-color: #8400ff59;
+    background-image: linear-gradient(to top, #51ff7f 0%, rgba(14, 171, 6) 100%);
+    background-size: 100%;
+    
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+}
+
+.fa-gem{
+    margin-right:0.5rem;
+}
+
+h1, h2 {
+    font-family: 'Montserrat Alternates', sans-serif;
+    text-align:center
+}
+
+label{
+    display: block;         /* makes the label act like a block element */
+    
+    font-size: 35px;        /* increases font size */
+    margin: 10px 0;         /* optional spacing above/below */
+    font-family: 'Montserrat Alternates', sans-serif; /* your font */
+}
+.slider-container {
+    display: flex;
+    align-items: center;   /* vertically center number with slider */
+    justify-content: center; /* center horizontally in the page */
+    width: 100%;
+    gap: 15px;             /* space between slider and number */
+}
+
+input[type="range"] {
+    width: 400px;  /* bigger slider */
+}
+.filters {
+    max-width: 800px;
+    margin: 100px auto;
+    padding: 20px;
+    background: rgba(71, 152, 67, 0.8);
+    border-radius: 10px;
+    text-align: left;
+}
+
+.filters h2 {
+    text-align: center;
+}
+
+.filters label {
+    display: block;
+    margin: 10px 0;
+}
+
+body {
+    background-image: url('images/Untitled design (8).png'); /* path to your image */
+    background-size: cover;   /* make it cover the entire viewport */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat; /* don't repeat the image */
+    background-attachment: fixed; /* optional: image stays fixed on scroll */
+}
+
+input[type="checkbox"] {
+    transform: scale(1.5); /* 1.5 = 150% size */
+    margin: 10px;           /* optional spacing */
+    cursor: pointer;        /* pointer on hover */
+}
+.checkbox-group {
+  display: flex;           /* arrange children in a row */
+  gap: 40px;               /* space between checkboxes */
+  align-items: center;     /* vertically center checkbox and text */
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  font-size: 34px;         /* optional, adjust text size */
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 25px;             /* make checkboxes bigger */
+  height: 25px;
+  margin-right: 8px;       /* space between checkbox and label text */
+}
+
+.form-group {
+  display: flex;           /* put label and input in a row */
+  align-items: center;     /* vertically align them */
+  margin-bottom: 15px;     /* space between rows */
+}
+
+.form-group label {
+  width: 150    px;            /* fixed width for labels */
+  margin-right: 50px;      /* space between label and input */
+  font-size: 34px;
+  white-space: nowrap;
+}
+
+.form-group input[type="text"], .form-group textarea {
+  flex: 1;                 /* input takes remaining width */
+  padding: 8px;
+  font-size: 25px;
+  width: 200px;
+  border-radius: 5px;
+    text-align: center;
+}
+
+#imageUpload {
+    width: 300px;         /* make the input wider */
+    height: 50px;         /* make it taller */
+    font-size: 18px;      /* increase the text size */
+    padding: 10px;        /* add some padding inside */
+    border: 3px solid #ccc;
+    border-radius: 8px;   /* optional rounded corners */
+    cursor: pointer;      /* makes cursor a pointer */
+}
+
+/* Style your textarea */
+#userPrompt2 {
+    width: 750px;        /* makes it wider */
+    height: 150px;       /* makes it taller */
+    font-size: 18px;     /* bigger text inside */
+    padding: 10px;       /* space inside the box */
+    border: 2px solid #ccc;  /* optional border */
+    border-radius: 8px;      /* rounded corners */
+    resize: vertical;    /* allows vertical resize, optional */
+}
+
+button{
+    width: 750px;
+}
