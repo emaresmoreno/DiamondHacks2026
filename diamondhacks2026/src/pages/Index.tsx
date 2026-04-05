@@ -2,42 +2,39 @@ import { useState } from "react";
 import { MapPin } from "lucide-react";
 
 import { useToast } from "../hooks/use-toast";
-import { searchLocations, type LocationResult } from "../lib/nominatim";
-import { ucsdLocations, heatColor } from "../lib/ucsd-locations";
+import { heatColor } from "../lib/ucsd-locations";
+// 1. Point to your updated function and type
+import { searchLocations } from "../lib/search-results";
+import type { studyspots } from "../lib/ucsd-locations"; 
 
 import MapView from "../components/MapView";
 import SearchBar from "../components/SearchBar";
 import LocationList from "../components/LocationList";
 
-
 const Index = () => {
-  const [locations, setLocations] = useState<LocationResult[]>([]);
-  const [selected, setSelected] = useState<LocationResult | null>(null);
+  // 2. State is now powered purely by your clean Location type!
+  const [locations, setLocations] = useState<studyspots[]>([]);
+  const [selected, setSelected] = useState<studyspots | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
-  const [heatmapSelected, setHeatmapSelected] = useState<number | null>(null);
   const { toast } = useToast();
 
-  // Map place_id → heat color for locations that match UCSD names
-  const pinColors: Record<number, string> = {};
+  // 3. Pin colors map directly to location names now
+  const pinColors: Record<string, string> = {};
   locations.forEach((loc) => {
-    const name = loc.display_name.split(",")[0].trim();
-    const ucsd = ucsdLocations.find(
-      (u) => name.toLowerCase().includes(u.name.toLowerCase()) || u.name.toLowerCase().includes(name.toLowerCase())
-    );
-    if (ucsd) {
-      pinColors[loc.place_id] = heatColor(ucsd.popularity);
-    }
+    pinColors[loc.name] = heatColor(loc.popularity);
   });
 
   const handleSearch = async (q: string) => {
+    if (!q.trim()) return;
+
     setIsLoading(true);
     setQuery(q);
-    setHeatmapSelected(null);
     try {
       const results = await searchLocations(q);
       setLocations(results);
       setSelected(results[0] || null);
+
       if (results.length === 0) {
         toast({ title: "No results", description: "Try different keywords." });
       }
@@ -48,44 +45,8 @@ const Index = () => {
     }
   };
 
-  const handleHeatmapSelect = (index: number) => {
-    const loc = ucsdLocations[index];
-    setHeatmapSelected(index);
-    // Create a synthetic LocationResult so the map navigates
-    const synth: LocationResult = {
-      place_id: -(index + 1),
-      display_name: loc.name + ", UCSD, La Jolla, CA",
-      lat: String(loc.lat),
-      lon: String(loc.lon),
-      type: "university",
-      category: "education",
-      importance: loc.popularity,
-    };
-    setSelected(synth);
-    // Also update location list to show UCSD locations
-    if (locations.length === 0 || query === "") {
-      setLocations(
-        ucsdLocations.map((u, i) => ({
-          place_id: -(i + 1),
-          display_name: u.name + ", UCSD, La Jolla, CA",
-          lat: String(u.lat),
-          lon: String(u.lon),
-          type: "university",
-          category: "education",
-          importance: u.popularity,
-        }))
-      );
-      setQuery("UCSD");
-    }
-  };
-
-  // Build pinColors for synthetic UCSD entries too
-  ucsdLocations.forEach((u, i) => {
-    pinColors[-(i + 1)] = heatColor(u.popularity);
-  });
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row items-center gap-4">
@@ -98,43 +59,37 @@ const Index = () => {
       </header>
 
       {/* Content */}
-      <main className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {locations.length === 0 && !isLoading ? (
-            <div className="lg:col-span-3">
-              <MapView
-                onHeatmapSelect={handleHeatmapSelect}
-                heatmapSelectedIndex={heatmapSelected}
-                lat={selected?.lat}
-                lon={selected?.lon}
-                query={query}
-              />
-            </div>
-          ) : (
-            <>
-              <div className="lg:col-span-1">
-                <h2 className="text-sm font-medium text-muted-foreground mb-3">
-                  {locations.length} result{locations.length !== 1 ? "s" : ""} for &quot;{query}&quot;
-                </h2>
-                <LocationList
-                  locations={locations}
-                  selectedId={selected?.place_id ?? null}
-                  onSelect={setSelected}
-                  pinColors={pinColors}
-                />
-              </div>
-              <div className="lg:col-span-2">
-                <MapView
-                  lat={selected?.lat}
-                  lon={selected?.lon}
-                  query={query}
-                  onHeatmapSelect={handleHeatmapSelect}
-                  heatmapSelectedIndex={heatmapSelected}
-                />
-              </div>
-            </>
+      <main className="container mx-auto px-4 py-6 flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {/* LEFT COLUMN: Results List */}
+        <div className="lg:col-span-1 flex flex-col h-[calc(100vh-140px)]">
+          {query && (
+            <h2 className="text-sm font-medium text-muted-foreground mb-3">
+              {locations.length} result{locations.length !== 1 ? "s" : ""} for &quot;{query}&quot;
+            </h2>
           )}
+
+          <div className="overflow-y-auto flex-1">
+            <LocationList
+              locations={locations}
+              selectedId={selected?.name ?? null} // Using name as the unique key now
+              onSelect={setSelected}
+              pinColors={pinColors}
+            />
+          </div>
         </div>
+
+        {/* RIGHT COLUMN: Permanent Large Map */}
+        <div className="lg:col-span-2 h-[calc(100vh-140px)] sticky top-[80px]">
+          <MapView
+            lat={selected ? String(selected.lat) : undefined}
+            lon={selected ? String(selected.lon) : undefined}
+            query={query}
+            // Passing the raw locations directly to MapView for heatmap rendering
+            locations={locations}
+          />
+        </div>
+
       </main>
     </div>
   );

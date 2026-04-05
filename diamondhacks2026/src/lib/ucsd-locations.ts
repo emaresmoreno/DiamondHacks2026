@@ -4,7 +4,7 @@ import {useState} from 'react';
 
 //replace this with fetching
 
-export interface locations {
+export interface studyspots {
 //   id: string;
   name: string;
   lat: number;
@@ -28,7 +28,7 @@ export interface locations {
 // }, []);
 
 // Seeded random-ish values matching the heatmap
-export const ucsdLocations: locations[] = [
+export const ucsdLocations: studyspots[] = [
   {name: 'Geisel Library', lat: 32.8812, lon: -117.2375, popularity: 0.62},
   {name: 'Price Center', lat: 32.8798, lon: -117.2362, popularity: 0.48},
   {name: 'MOM Cafe', lat: 32.8785, lon: -117.2401, popularity: 0.55},

@@ -1,12 +1,12 @@
 import { useState } from "react";
+import type {studyspots}  from "../lib/ucsd-locations";
 import { ucsdLocations, heatColor } from "../lib/ucsd-locations";
 
 interface MapViewProps {
     lat?: string;
     lon?: string;
     query?: string;
-    onHeatmapSelect?: (index: number) => void;
-    heatmapSelectedIndex?: number | null;
+    locations: studyspots[];
 }
 
 // UCSD campus bounding box for positioning overlay markers
@@ -51,7 +51,7 @@ function latLonToPercent(lat: number, lon: number) {
     return { x: Math.max(2, Math.min(98, x)), y: Math.max(2, Math.min(98, y)) };
 }
 
-const MapView = ({ lat, lon, query, onHeatmapSelect, heatmapSelectedIndex }: MapViewProps) => {
+const MapView = ({ lat, lon, query, locations }: MapViewProps) => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
     const CENTER = getCenter(getLatLonBounds(ucsdLocations));
@@ -77,7 +77,7 @@ const MapView = ({ lat, lon, query, onHeatmapSelect, heatmapSelectedIndex }: Map
                 title="Map"
             />
 
-            {/* Heatmap overlay dots */}
+            {/*
             {showOverlay && (
                 <div className="absolute inset-0 pointer-events-none">
                     {ucsdLocations.map((loc: any, i: number) => {
@@ -108,7 +108,6 @@ const MapView = ({ lat, lon, query, onHeatmapSelect, heatmapSelectedIndex }: Map
                         );
                     })}
 
-                    {/* Tooltip for hovered location */}
                     {hoveredIndex !== null && (
                         <div
                             className="absolute z-20 pointer-events-none bg-card text-card-foreground text-xs font-medium px-2 py-1 rounded shadow-md border border-border whitespace-nowrap -translate-x-1/2"
@@ -129,8 +128,7 @@ const MapView = ({ lat, lon, query, onHeatmapSelect, heatmapSelectedIndex }: Map
                     )}
                 </div>
             )}
-
-            {/* Legend */}
+                
             {showOverlay && (
                 <div className="absolute bottom-3 left-3 z-20 flex items-center gap-1 text-xs bg-card/90 backdrop-blur-sm text-muted-foreground px-2 py-1 rounded border border-border shadow-sm">
                     <span>Low</span>
@@ -142,7 +140,7 @@ const MapView = ({ lat, lon, query, onHeatmapSelect, heatmapSelectedIndex }: Map
                     />
                     <span>High</span>
                 </div>
-            )}
+            )} */}
         </div>
     );
 };
