@@ -1,23 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { MapPin } from "lucide-react";
 
 import { useToast } from "../hooks/use-toast";
 import { heatColor } from "../lib/ucsd-locations";
 // 1. Point to your updated function and type
 import { searchLocations } from "../lib/search-results";
-import type { studyspots } from "../lib/ucsd-locations"; 
+import type { studyspots } from "../lib/ucsd-locations";
 
 import MapView from "../components/MapView";
 import SearchBar from "../components/SearchBar";
 import LocationList from "../components/LocationList";
+import { Plus, X } from "lucide-react";
+import VideoInsertionPage from "./VideoInsertionPage";
+import * as Dialog from "@radix-ui/react-dialog";
+
 
 const Index = () => {
-  // 2. State is now powered purely by your clean Location type!
+  const [currentCoords, setCurrentCoords] = useState({ lat: 40.7128, lng: -74.0060 });
   const [locations, setLocations] = useState<studyspots[]>([]);
   const [selected, setSelected] = useState<studyspots | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      console.log("Geolocation is not supported by your browser");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCurrentCoords({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (err) => {
+        console.log("Permission denied. Using default UCSD location.");
+        console.error(err);
+      }
+    );
+  }, []);
 
   // 3. Pin colors map directly to location names now
   const pinColors: Record<string, string> = {};
@@ -55,9 +79,40 @@ const Index = () => {
             <h1 className="text-xl font-bold text-foreground">Where2Study</h1>
           </div>
           <SearchBar onSearch={handleSearch} isLoading={isLoading} />
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <button className="your-radial-button-class p-3 rounded-full hover:scale-110 transition-transform shadow-lg">
+                <Plus className="w-6 h-6 text-black your-radial-plus-class" />
+              </button>
+            </Dialog.Trigger>
+
+            <Dialog.Portal>
+              {/* The Dimmed Overlay */}
+              <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]" />
+
+              {/* The Modal Content */}
+              <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-[101] w-[95vw] max-w-lg overflow-hidden border border-gray-100">
+
+                {/* Header inside the popup */}
+                <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+                  <Dialog.Title className="text-lg font-semibold">Add New Study Spot</Dialog.Title>
+                  <Dialog.Close asChild>
+                    <button className="p-1 hover:bg-gray-200 rounded-full transition">
+                      <X className="w-5 h-5 text-gray-500" />
+                    </button>
+                  </Dialog.Close>
+                </div>
+
+                {/* YOUR VIDEO COMPONENT GOES HERE */}
+                <div className="p-0">
+                  <VideoInsertionPage lat={currentCoords.lat} lng={currentCoords.lng} />
+</div>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
+        
         </div>
       </header>
-
       {/* Content */}
       <main className="container mx-auto px-4 py-6 flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -87,7 +142,7 @@ const Index = () => {
             query={query}
             locations={locations}
             // Add this line to force a zoom scale when an item is selected
-            zoom={selected ? 17 : 14} 
+            zoom={selected ? 17 : 14}
             selectedId={selected?.name ?? ""}
           />
         </div>

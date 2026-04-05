@@ -5,7 +5,7 @@ import Index from "./pages/Index";
 import { Toaster as Sonner } from "./components/ui/sonner";
 import { TooltipProvider } from "./components/ui/tooltip";
 
-
+(window as any).process = { env: {} };
 const queryClient = new QueryClient();
 
 const App = () => (

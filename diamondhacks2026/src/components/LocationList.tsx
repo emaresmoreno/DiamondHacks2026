@@ -11,16 +11,16 @@ interface LocationListProps {
 }
 
 const getPopularityLabel = (value: number) => {
-  if (value >= 0.7) return "Crowded";
-  if (value >= 0.4) return "Moderate";
-  return "Empty";
+    if (value >= 0.7) return "Crowded";
+    if (value >= 0.4) return "Moderate";
+    return "Empty";
 };
 
 // Converts 0.0 - 1.0 into a sound description
 const getSoundLabel = (value: number) => {
-  if (value >= 0.7) return "Loud";
-  if (value >= 0.4) return "Moderate";
-  return "Silent";
+    if (value >= 0.7) return "Loud";
+    if (value >= 0.4) return "Moderate";
+    return "Silent";
 };
 
 function RatingCircle({ value }: { value: number }) {
@@ -83,12 +83,25 @@ const LocationList = ({ locations, selectedId, onSelect, pinColors }: LocationLi
                             <p className="text-xs text-muted-foreground">
                                 {loc.features.join(" • ")}
                             </p>
-                            <br/>
+                            <br />
                             {selectedId === loc.name && (
                                 <p className="text-xs text-muted-foreground">Sound Level: {getSoundLabel(loc.sound)}</p>
                             )}
                             {selectedId === loc.name && (
                                 <p className="text-xs text-muted-foreground">Popularity: {getPopularityLabel(loc.popularity)}</p>
+                            )}
+                            {(selectedId === loc.name) && (loc.hasOutlets) ? (
+                                <p className="text-xs text-muted-foreground">Outlets</p>
+                            ) : (
+                                <p className="text-xs text-muted-foreground">No Outlets</p>
+                            )}
+                            {(selectedId === loc.name) && (loc.isAccessible) ? (
+                                <p className="text-xs text-muted-foreground">Accessible</p>
+                            ) : (
+                                <p className="text-xs text-muted-foreground">Not Accessible</p>
+                            )}
+                           {selectedId === loc.name && (loc.freeTimeOfDay) && (
+                                <p className="text-xs text-muted-foreground">Free Time of Day: {loc.freeTimeOfDay.toUpperCase()}</p>
                             )}
                         </div>
                         <div className="flex-shrink-0 ml-auto"><RatingCircle value={loc.rating} /></div>

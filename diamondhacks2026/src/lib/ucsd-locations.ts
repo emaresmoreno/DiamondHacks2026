@@ -5,11 +5,6 @@ import {db} from './firebase';
 
 // replace this with fetching
 
-// export async function fetchLocations(): Promise<UcsdLocation[]> {
-//   const snapshot = await getDocs(collection(db, "locations"));
-//   return snapshot.docs.map(doc => doc.data() as UcsdLocation);
-// }
-
 
 // for the tsx files
 //  const [locations, setLocations] = useState<locations[]>([]);
@@ -17,6 +12,14 @@ import {db} from './firebase';
 // useEffect(() => {
 //   fetchLocations().then(setLocations);
 // }, []);
+
+export const fetchLocations = async (): Promise<studyspots[]> => {
+  const querySnapshot = await getDocs(collection(db, "studySpots"));
+  return querySnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  })) as studyspots[];
+};
 
 // Seeded random-ish values matching the heatmap
 export interface studyspots {
